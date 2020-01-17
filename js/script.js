@@ -16,8 +16,11 @@ FSJS project 2 - List Filter and Pagination
    will only be used inside of a function, then it can be locally 
    scoped to that function.
 ***/
+// Constant global variables
 const studentList = document.querySelectorAll('.student-item cf');
 const pages = document.querySelectorAll('.page');
+const studentPerPage = 10;
+
 
 
 
@@ -35,17 +38,25 @@ const pages = document.querySelectorAll('.page');
        that will be passed into the parens later when you call or 
        "invoke" the function 
 ***/
-const showPage = (list, page) =>
+// showPage function to hide students on given page
+function showPage(studentList, page)
 {
-   for (let i = 0; i < list.length; i++)
-   {
-      if (list[i] >= page[i] && list[i] <= page[i])
+   // Declare variables to start and end index for list of items shown on page
+   let startIndex = (page * studentPerPage) - studentPerPage;
+   let endIndex = page * studentPerPage;
+
+   for (let i = 0; i < studentList.length; i++)
+   {  
+      if (studentList[i] >= startIndex && studentList[i] < endIndex)
       {
-         
+         studentList[i].style.visibility = '';
+      }
+      else
+      {
+         studentList[i].style.visibility = 'hidden';
       }
    }
 }
-
 
 /*** 
    Create the `appendPageLinks function` to generate, append, and add 
