@@ -2,9 +2,6 @@
 Treehouse Techdegree:
 FSJS project 2 - List Filter and Pagination
 ******************************************/
-   
-// Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
-
 
 /*** 
    Add your global variables that store the DOM elements you will 
@@ -16,12 +13,8 @@ FSJS project 2 - List Filter and Pagination
    will only be used inside of a function, then it can be locally 
    scoped to that function.
 ***/
-// Constant global variables
-const studentList = document.querySelectorAll('.student-item cf');
-const pages = document.querySelectorAll('.page');
-const studentPerPage = 10;
-
-
+const studentList = document.querySelectorAll('ul li');
+const studentsPerPage = 10;
 
 
 /*** 
@@ -38,22 +31,21 @@ const studentPerPage = 10;
        that will be passed into the parens later when you call or 
        "invoke" the function 
 ***/
-// showPage function to hide students on given page
 function showPage(studentList, page)
 {
-   // Declare variables to start and end index for list of items shown on page
-   let startIndex = (page * studentPerPage) - studentPerPage;
-   let endIndex = page * studentPerPage;
+   // Declare variables start and end index for list of items shown on page
+   let startIndex = (page * studentsPerPage) - studentsPerPage;
+   let endIndex = page * studentsPerPage;
 
-   for (let i = 0; i < studentList.length; i++)
+   for (let i = 0; i <= studentList.length; i++)
    {  
       if (studentList[i] >= startIndex && studentList[i] < endIndex)
       {
-         studentList[i].style.visibility = '';
+         studentList[i].style.display = '';
       }
       else
       {
-         studentList[i].style.visibility = 'hidden';
+         studentList[i].style.display = 'none';
       }
    }
 }
