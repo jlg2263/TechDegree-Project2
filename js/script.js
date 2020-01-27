@@ -6,9 +6,36 @@ FSJS project 2 - List Filter and Pagination
 /*** 
    Global variables for DOM elements to reference and/or manipulate. 
 ***/
-const studentList = document.getElementsByClassName('.student-item cf');
+const studentList = document.getElementsByClassName('student-item cf');
 const studentsPerPage = 10;
-const toggleSearch = document.querySelector('.search');
+
+// Additional global variables for search function which was removed from html
+const pageHeader = document.querySelector('.page-header cf');
+const searchDiv = document.createElement('div');
+const searchInput = document.createElement('input');
+const searchButton = document.createElement('button');
+
+// Add className, type, attributes, innerHTML, etc for elements
+searchDiv.setAttribute('class', 'search-student');
+searchInput.setAttribute('type', 'text');
+searchInput.setAttribute('class', 'search');
+searchInput.placeholder = 'Search for students...';
+searchButton.setAttribute('type', 'button');
+searchButton.setAttribute('class', 'search');
+searchButton.innerHTML = 'Search';
+
+// Append elements to pageHeader, and searchDiv
+pageHeader.appendChild(searchDiv);
+searchDiv.appendChild(searchInput);
+searchDiv.appendChild(searchButton);
+
+/***
+   `searchStudent` function to show student entered
+ ***/
+const searchStudent = () =>
+{
+   
+}
 
 /*** 
    `showPage` function to hide all of the items in the 
@@ -21,7 +48,7 @@ const showPage = (studentList, page) =>
    let endIndex = page * studentsPerPage;
 
    // Use a for loop to loop over the list items 
-   for (let i = 0; i <= studentList.length; i++)
+   for (let i = 0; i < studentList.length; i++)
    {  
       // If statement to display list items dependent on the index and page/button selected
       if (i >= startIndex && i < endIndex)
@@ -39,7 +66,7 @@ const showPage = (studentList, page) =>
    `appendPageLinks` function to generate, append, and add 
    functionality to the pagination buttons.
 ***/
-const appendPageLinks = (list) =>
+const appendPageLinks = (studentList) =>
 {
    // Declare local variables 
    let numberOfPages = Math.ceil(studentList.length / studentsPerPage);
@@ -57,7 +84,7 @@ const appendPageLinks = (list) =>
    // Use for loop to loop through the number of pages to add a li and a tag
    for (let i = 0; i < numberOfPages; i++)
    {
-      // Declare nexted variables for li & a elements
+      // Declare nested variables for li & a elements
       let paginationLi = document.createElement('li');
       let paginationA = document.createElement('a');
 
@@ -77,27 +104,39 @@ const appendPageLinks = (list) =>
    }
 
    // Declare a DOM element for the anchor element - Found this in ES2015 video for loops
-   const pageClicked = document.getElementsByTagName('a');
+   let pageClicked = document.querySelectorAll('a');
 
    // Use for loop to loop through all page link and match the page with the students in the list
    for (let i = 0; i < pageClicked.length; i++)
    {
       // Add event listener when acnhor/page/button is selected
-      paginationA[i].addEventListener('click', (event) =>
+      pageClicked[i].addEventListener('click', (event) =>
       {
          // Remove active class from previous clicked link
          let previousPage = document.querySelector('.active');
          previousPage.className = '';
 
-         // Add active class to current link
+         // Add active class to current link & apply text to page being passed
          let currentPage = event.target;
+         let page = currentPage.textContent;
          currentPage.className = 'active';
-
+         
          // Call showPage function passing 2 parms
-         showPage(studentList, currentPage);
+         showPage(studentList, page);
       });
    }
 }
+
+/***
+   Call showPage function, passing the global variable for list of students and page #1 initially
+ ***/
+showPage(studentList, 1);
+
+
+/***
+   Call appendPage function, passing the global variable for list of students
+ ***/
+appendPageLinks(studentList);
 
 /***
     Toggle Search function is an event listener to show student entered in search 
