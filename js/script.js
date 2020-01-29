@@ -35,14 +35,17 @@ mainDiv.appendChild(searchDiv);
  ***/
 const searchStudent = (searchInput, list) =>
 {  
+   // Declare local variables for search function
+   let li = list[i];
+
    // Use for loop to loop through student list array to search 
    for (let i = 0; i < list.lenght; i++)
    {
       if (list[i].)
       {
-
+         let li = list[i];
       }
-      else if ()
+      else ()
       {
 
       }
@@ -50,10 +53,17 @@ const searchStudent = (searchInput, list) =>
 }
 
 /***
-   `Search Button` event handler to process user input
+   `Search Button` event handler for click or keyup to process user input
  ***/
 searchButton.addEventListener('click', (event) =>
 {
+   event.preventDefault();
+   searchStudent(searchInput, studentList);
+});
+
+searchButton.addEventListener('keyup', (event) =>
+{  
+   event.preventDefault();
    searchStudent(searchInput, studentList);
 });
 
