@@ -6,58 +6,78 @@ FSJS project 2 - List Filter and Pagination
 /*** 
    Global variables for DOM elements to reference and/or manipulate. 
 ***/
-const studentList = document.getElementsByClassName('student-item cf');
+const studentList = document.getElementsByClassName('student-item');
 const studentsPerPage = 10;
+const studentSearch = [];
 
 // Additional global variables for search function which was removed from html
-const pageHeader = document.querySelector('.page-header cf');
+const mainDiv = document.querySelector('.page-header');
 const searchDiv = document.createElement('div');
 const searchInput = document.createElement('input');
 const searchButton = document.createElement('button');
 
 // Add className, type, attributes, innerHTML, etc for elements
-searchDiv.setAttribute('class', 'search-student');
-searchInput.setAttribute('type', 'text');
-searchInput.setAttribute('class', 'search');
+searchDiv.className = 'search-student';
+searchInput.type = 'text';
+searchInput.className = 'search';
 searchInput.placeholder = 'Search for students...';
-searchButton.setAttribute('type', 'button');
-searchButton.setAttribute('class', 'search');
+searchButton.className = 'search';
 searchButton.innerHTML = 'Search';
 
 // Append elements to pageHeader, and searchDiv
-pageHeader.appendChild(searchDiv);
 searchDiv.appendChild(searchInput);
 searchDiv.appendChild(searchButton);
+mainDiv.appendChild(searchDiv);
+
 
 /***
    `searchStudent` function to show student entered
  ***/
-const searchStudent = () =>
-{
-   
+const searchStudent = (searchInput, list) =>
+{  
+   // Use for loop to loop through student list array to search 
+   for (let i = 0; i < list.lenght; i++)
+   {
+      if (list[i].)
+      {
+
+      }
+      else if ()
+      {
+
+      }
+   }
 }
+
+/***
+   `Search Button` event handler to process user input
+ ***/
+searchButton.addEventListener('click', (event) =>
+{
+   searchStudent(searchInput, studentList);
+});
 
 /*** 
    `showPage` function to hide all of the items in the 
    list except for the ten you want to show.
 ***/
-const showPage = (studentList, page) =>
+const showPage = (list, page) =>
 {
    // Declare local variables start and end index for list of items shown on page
    let startIndex = (page * studentsPerPage) - studentsPerPage;
    let endIndex = page * studentsPerPage;
 
    // Use a for loop to loop over the list items 
-   for (let i = 0; i < studentList.length; i++)
+   for (let i = 0; i < list.length; i++)
    {  
       // If statement to display list items dependent on the index and page/button selected
       if (i >= startIndex && i < endIndex)
       {
-         studentList[i].style.display = "block";
+         list[i].style.display = "block";
       }
       else
       {
-         studentList[i].style.display = "none";
+         list[i].style.display = "none";
       }
    }
 }
@@ -66,13 +86,13 @@ const showPage = (studentList, page) =>
    `appendPageLinks` function to generate, append, and add 
    functionality to the pagination buttons.
 ***/
-const appendPageLinks = (studentList) =>
+const appendPageLinks = (list) =>
 {
    // Declare local variables 
-   let numberOfPages = Math.ceil(studentList.length / studentsPerPage);
-   let pageDiv = document.querySelector('.page');
-   let paginationDiv = document.createElement('div');
-   let paginationUl = document.createElement('ul');   
+   const numberOfPages = Math.ceil(list.length / studentsPerPage);
+   const pageDiv = document.querySelector('.page');
+   const paginationDiv = document.createElement('div');
+   const paginationUl = document.createElement('ul');   
 
    // Assign pagination div element a new class name 
    paginationDiv.className = 'pagination';
@@ -85,8 +105,8 @@ const appendPageLinks = (studentList) =>
    for (let i = 0; i < numberOfPages; i++)
    {
       // Declare nested variables for li & a elements
-      let paginationLi = document.createElement('li');
-      let paginationA = document.createElement('a');
+      const paginationLi = document.createElement('li');
+      const paginationA = document.createElement('a');
 
       // Append paginationLi & paginationA elements
       paginationUl.appendChild(paginationLi);
@@ -95,16 +115,16 @@ const appendPageLinks = (studentList) =>
       // Set anchor element href attribute to # & set text to the page number for each link
       paginationA.href = "#";
       paginationA.textContent = i + 1;
-
-      // If statment to add active class name to first pagination link
-      if (i === 0)
-      {  
-         paginationA.setAttribute('class', 'active');
-      }
    }
 
+   // Add active class name to first pagination link
+   paginationUl.firstElementChild.firstElementChild.className = 'active';
+
+   // Call showPage function, passing the global variable for list of students and page #1 initially
+   showPage(list, 1);
+
    // Declare a DOM element for the anchor element - Found this in ES2015 video for loops
-   let pageClicked = document.querySelectorAll('a');
+   const pageClicked = document.querySelectorAll('a');
 
    // Use for loop to loop through all page link and match the page with the students in the list
    for (let i = 0; i < pageClicked.length; i++)
@@ -112,46 +132,22 @@ const appendPageLinks = (studentList) =>
       // Add event listener when acnhor/page/button is selected
       pageClicked[i].addEventListener('click', (event) =>
       {
+         // Add active class to current link & apply text to page being passed
+         const currentPage = event.target;
+         const page = currentPage.textContent;
+         currentPage.className = 'active';
+
          // Remove active class from previous clicked link
-         let previousPage = document.querySelector('.active');
+         const previousPage = document.querySelector('.active');
          previousPage.className = '';
 
-         // Add active class to current link & apply text to page being passed
-         let currentPage = event.target;
-         let page = currentPage.textContent;
-         currentPage.className = 'active';
-         
          // Call showPage function passing 2 parms
-         showPage(studentList, page);
+         showPage(list, page);
       });
    }
 }
 
 /***
-   Call showPage function, passing the global variable for list of students and page #1 initially
- ***/
-showPage(studentList, 1);
-
-
-/***
    Call appendPage function, passing the global variable for list of students
  ***/
 appendPageLinks(studentList);
-
-/***
-    Toggle Search function is an event listener to show student entered in search 
- ***/
-// toggleSearch.addEventListener('click', () =>
-// {     
-//   if (listDiv.style.display == 'none') 
-//   {
-//     listDiv.style.display = 'block'; 
-//   }
-//   else
-//   { 
-//     toggleList.textContent = 'Show List';
-//     listDiv.style.display = 'none'; 
-//   }
-// });
-
-// Remember to delete the comments that came with this file, and replace them with your own code comments.
