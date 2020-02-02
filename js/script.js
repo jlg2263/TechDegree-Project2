@@ -77,13 +77,11 @@ searchButton.addEventListener('click', (event) =>
    {
       resetPageLinks();
       appendPageLinks(numOfStudentSearch);
-      showPage(numOfStudentSearch, 1);
    }
    else
    {
       resetPageLinks();
       appendPageLinks(studentList);
-      showPage(studentList, 1);
    }
 });
 
