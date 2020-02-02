@@ -8,9 +8,10 @@ FSJS project 2 - List Filter and Pagination
 ***/
 const studentList = document.getElementsByClassName('student-item');
 const studentsPerPage = 10;
-const studentSearch = [];
 
 // Additional global variables for search function which was removed from html
+const page = document.querySelector('.page');
+const resultsMsg = document.createElement('p');
 const mainDiv = document.querySelector('.page-header');
 const searchDiv = document.createElement('div');
 const searchInput = document.createElement('input');
@@ -23,8 +24,10 @@ searchInput.className = 'search';
 searchInput.placeholder = 'Search for students...';
 searchButton.className = 'search';
 searchButton.innerHTML = 'Search';
+resultsMsg.textContent = 'No results were found.';
 
 // Append elements to pageHeader, and searchDiv
+page.appendChild(resultsMsg);
 searchDiv.appendChild(searchInput);
 searchDiv.appendChild(searchButton);
 mainDiv.appendChild(searchDiv);
@@ -33,38 +36,72 @@ mainDiv.appendChild(searchDiv);
 /***
    `searchStudent` function to show student entered
  ***/
-const searchStudent = (searchInput, list) =>
+const searchStudent = (text, list) =>
 {  
-   // Declare local variables for search function
-   let li = list[i];
+   // Set searchResults as an empty array 
+   let searchResults = [];
 
    // Use for loop to loop through student list array to search 
-   for (let i = 0; i < list.lenght; i++)
+   for (let i = 0; i < list.length; i++)
    {
-      if (list[i].)
+      // Declare local variables for search function & convert string to lowercase
+      const student = list[i];
+      const studentName = student.firstElementChild.children[1].innerHTML.toLowerCase();
+      
+      // If statement to pull results
+      if (text.length !== 0 && studentName.includes(text.toLowerCase()))
       {
-         let li = list[i];
+         searchResults.push(student[i]);
+         student.style.display = '';
       }
-      else ()
+      else
       {
-
+         student.style.display = 'none';
       }
    }
+   return searchResults;
 }
 
 /***
-   `Search Button` event handler for click or keyup to process user input
+   `Search` event handler for click or keyup to process user input
  ***/
 searchButton.addEventListener('click', (event) =>
 {
    event.preventDefault();
-   searchStudent(searchInput, studentList);
+   const text = searchInput.value;
+
+   // Call functions
+   const numOfStudentSearch = searchStudent(text, studentList);
+   
+   if (numOfStudentSearch.length !== 0)
+   {
+      resetPageLinks();
+      appendPageLinks(numOfStudentSearch);
+      showPage(numOfStudentSearch, 1);
+   }
+   else
+   {
+      resetPageLinks();
+      appendPageLinks(studentList);
+      showPage(studentList, 1);
+   }
 });
 
-searchButton.addEventListener('keyup', (event) =>
+searchInput.addEventListener('keyup', (event) =>
 {  
-   event.preventDefault();
-   searchStudent(searchInput, studentList);
+   // Call search student
+   const numOfStudentSearch = searchStudent(event.target.value, studentList);
+
+   if (numOfStudentSearch.length !== 0)
+   {
+      resetPageLinks();
+      appendPageLinks(numOfStudentSearch);
+   }
+   else
+   {
+      resetPageLinks();
+      appendPageLinks(studentList);
+   }
 });
 
 /*** 
@@ -76,6 +113,13 @@ const showPage = (list, page) =>
    // Declare local variables start and end index for list of items shown on page
    let startIndex = (page * studentsPerPage) - studentsPerPage;
    let endIndex = page * studentsPerPage;
+   
+   resultsMsg.style.display = 'none';
+
+   if (list.length === 0)
+   {
+      resultsMsg.style.display = '';
+   }
 
    // Use a for loop to loop over the list items 
    for (let i = 0; i < list.length; i++)
@@ -83,11 +127,11 @@ const showPage = (list, page) =>
       // If statement to display list items dependent on the index and page/button selected
       if (i >= startIndex && i < endIndex)
       {
-         list[i].style.display = "block";
+         list[i].style.display = 'block';
       }
       else
       {
-         list[i].style.display = "none";
+         list[i].style.display = 'none';
       }
    }
 }
@@ -130,7 +174,9 @@ const appendPageLinks = (list) =>
    // Add active class name to first pagination link
    paginationUl.firstElementChild.firstElementChild.className = 'active';
 
-   // Call showPage function, passing the global variable for list of students and page #1 initially
+   /***
+      Call showPage function, passing the global variable for list of students and page #1 initially
+   ***/
    showPage(list, 1);
 
    // Declare a DOM element for the anchor element - Found this in ES2015 video for loops
@@ -155,6 +201,17 @@ const appendPageLinks = (list) =>
          showPage(list, page);
       });
    }
+}
+
+/*** 
+   `searchPagination` function to remove 
+   functionality to the pagination buttons.
+***/
+const resetPageLinks = () =>
+{
+   // Select a DOM element to remove links
+   const pageLinks = document.querySelector('.pagination');
+   page.removeChild(pageLinks);
 }
 
 /***
